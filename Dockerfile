@@ -18,6 +18,18 @@ RUN apt-get update \
     && gem install --no-document bundler \
     && rm -rf /var/lib/apt/lists/* # 20150323
 
+# ccache
+RUN apt-get update && apt-get -y install build-essential
+
+RUN wget -O /tmp/ccache-3.2.1.tar.gz http://samba.org/ftp/ccache/ccache-3.2.1.tar.gz \
+    && tar xvf /tmp/ccache-3.2.1.tar.gz -C /tmp \
+    && cd /tmp/ccache-3.2.1 && ./configure && make && make install \
+    && cp ccache /usr/local/bin/ \
+    && ln -s ccache /usr/local/bin/gcc \
+    && ln -s ccache /usr/local/bin/g++ \
+    && ln -s ccache /usr/local/bin/cc \
+    && ln -s ccache /usr/local/bin/c++
+
 ADD assets/setup/ /app/setup/
 RUN chmod 755 /app/setup/install
 RUN /app/setup/install

@@ -51,10 +51,22 @@ priority=20
 directory=${INSTALL_DIR}
 environment=HOME=/home/gitlab_ci_runner
 command=/usr/local/bin/bundle exec ./bin/runner
-user=gitlab_ci_runner
+user=root
 autostart=true
 autorestart=true
 stopsignal=USR2
+stdout_logfile=/var/log/supervisor/%(program_name)s.log
+stderr_logfile=/var/log/supervisor/%(program_name)s.log
+EOF
+
+cat > /etc/supervisor/conf.d/sshd.conf <<EOF
+[program:sshd]
+priority=20
+directory=/tmp
+command=/usr/sbin/sshd -D
+user=root
+autostart=true
+autorestart=true
 stdout_logfile=/var/log/supervisor/%(program_name)s.log
 stderr_logfile=/var/log/supervisor/%(program_name)s.log
 EOF
